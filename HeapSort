@@ -1,0 +1,134 @@
+# ExerAPA03
+
+public class HeapSort {
+
+    /**
+     * O piso (= floor) de um número real x é o resultado do arredondamento de x
+     * para baixo. Em outras palavras, o piso de x é o único número inteiro i
+     * Ex. O piso de 3.9 é 3.
+     * x Número real a ser calculado o piso.
+     * returna um valor inteiro com o piso de x.
+     */
+    public static int piso(double x) {
+        //Pego a parte inteira de x
+        int parteInteira = (int) x;
+        //Pego a parte fracionária de x
+        double parteFracionaria = x - parteInteira;
+        //Retorno x subtraindo a parte fracionária 
+        return (int) (x - parteFracionaria);
+    }
+
+    /*
+     * Retorna o índice do pai de i.
+     * i Índice do filho
+     * O índice do seu pai
+     */
+    public static int pai(int i) {
+        return (i / 2);
+    }
+
+    /*
+     * Retorna o índice do filho da esquerda de i.
+     * i Ïndice do pai
+     * O índice do filho da esquerda de i
+     */
+    public static int esquerda(int i) {
+        return (2 * i);
+    }
+
+    /*
+     * Retorna o índice do filho da direita de i.
+     * i Ïndice do pai
+     * O índice do filho da direita de i
+     */
+    public static int direita(int i) {
+        return (2 * i + 1);
+    }
+
+    /**
+     * Troca ou Swap.
+     * 
+     * Realiza a troca de posição de dois elementos do vetor.
+     * A[i]<->A[j]
+     *
+     * A Vetor que contém os dados
+     * i Primeira posição de troca
+     * j Segunda posição de troca
+     */
+    public static void troca(int[] A, int i, int j) {
+        int aux = A[i - 1];
+        A[i - 1] = A[j - 1];
+        A[j - 1] = aux;
+    }
+
+    /**
+     * MaxHeapiFy. 
+     * 
+     * Recebe A e i >= 1 tais que subárvores com raízes 2i e 2i + 1.
+     * São max-heaps e rearranja A de modo que subárvore com raiz i seja um
+     * max-heap. Organiza os elementos da heap, coloca o maior na raiz.
+     */
+    private static void maxHeapify(int A[], int n, int i) {
+        //Armazena o maior elemento
+        int maior = 0;
+        //Filho da esquerda
+        int esquerda = esquerda(i);                             
+        //Filho da direita
+        int direita = direita(i);                               
+
+        if ((esquerda <= n) && (A[esquerda - 1] > A[i - 1])) {  
+            maior = esquerda;                                   
+        } else {
+            maior = i;                                          
+        }
+        if ((direita <= n) && (A[direita - 1] > A[maior - 1])) {
+            maior = direita;                                    
+        }
+        if (maior != i) {                                       
+            troca(A, i, maior);                                 
+            maxHeapify(A, n, maior);                            
+        }
+    }
+
+    /*
+     * Recebe um vetor A e rearranja A para que seja max-heap. 
+     * Em maxHeap os nós pais são maiores que os respectivos nós filhos
+     */
+    private static void constroiMaxHeap(int A[], int n) {
+        for (int i = piso(n / 2); i >= 1; i--) {
+            maxHeapify(A, n, i);
+        }
+    }
+
+    private static void heapsort(int A[], int n) {
+        constroiMaxHeap(A, n);                  
+        int m = n;                              
+        for (int i = n; i >= 2; i--) {          
+            troca(A, 1, i);                     
+            m = m - 1;                          
+            maxHeapify(A, m, 1);                
+        }
+    }
+
+    public static void main(String args[]) {
+        
+        //Vetor dos dados    
+        int A[] = {50, 70, 60, 90, 10, 30, 20, 40};
+
+        // r representa o número de elementos
+        int n = A.length;
+
+        System.out.println(">>> Algoritmo HeapSort/Ordenação por Heap <<<");
+        System.out.println("Original: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print((i+1) + " - " + A[i]);
+        }
+        
+        heapsort(A, n);
+
+        System.out.println("Depois: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print((i+1) + " - " + A[i]);
+        }
+    }
+}
